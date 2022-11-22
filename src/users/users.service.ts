@@ -33,9 +33,15 @@ export class UsersService {
   }
 
   public async createUser(dto: CreateUserDto): Promise<UserResponse> {
-    const userCreated = this.userRepository.create(dto);
-    console.log(userCreated, dto);
-    if (userCreated) return (await this.userRepository.save(userCreated)).toResponse();
+    const userCreated = this.userRepository.create({
+      ...dto,
+      createdAt: String(new Date().getTime()),
+      updatedAt: String(new Date().getTime()),
+    });
+    if (userCreated) {
+      const user = (await this.userRepository.save(userCreated)).toResponse();
+      return user;
+    }
     throw new HttpException('Bad request', StatusCodes.BAD_REQUEST);
   }
 
@@ -51,7 +57,11 @@ export class UsersService {
       throw new ForbiddenException('Forbidden');
     }
     Object.assign(userUpdated, userDto);
-    return await this.userRepository.save(userUpdated);
+    return await this.userRepository.save({
+      ...userUpdated,
+      password: userDto.newPassword,
+      updatedAt: String(new Date().getTime()),
+    });
   }
 
   public async delete(id: string): Promise<void> {

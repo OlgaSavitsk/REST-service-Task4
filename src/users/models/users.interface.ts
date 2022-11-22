@@ -1,14 +1,16 @@
 export class User {
   id: string;
+  name: string;
   login: string;
   password?: string;
-  createdAt?: number;
-  updatedAt?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UserResponse {
   id: string;
   login: string;
-  createdAt?: number;
-  updatedAt?: number;
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

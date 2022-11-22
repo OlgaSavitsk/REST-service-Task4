@@ -11,9 +11,9 @@ const dataSource = new DataSource({
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DB as string,
   synchronize: true,
-  logging: true,
-  entities: ['src/**/**.entity{.ts, .js}'],
-  migrations: ['src/migrations/*ts'],
+  entities: ['dist/**/**/**.entity.js'],
+  migrations: ['dist/migrations/*ts'],
+  migrationsRun: true,
 });
 
 dataSource.initialize();

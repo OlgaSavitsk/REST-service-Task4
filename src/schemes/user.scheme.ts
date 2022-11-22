@@ -6,4 +6,6 @@ export class UserSchema {
 
   @ApiProperty({ example: 'Alex', description: 'Unique login' })
   login: string;
+
+  password: string;
 }
