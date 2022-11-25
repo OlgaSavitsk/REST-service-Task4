@@ -9,20 +9,22 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors,
-  ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user-dto';
-import { UpdatePasswordDto } from './dto/update-user-dto';
-import { TransformInterceptor } from './transform.interceptor';
+import { UpdateStatusDto } from './dto/update-user-dto';
 import { UserResponse } from './models/users.interface';
 import { UsersService } from './users.service';
 import { UserSchema } from 'src/schemes/user.scheme';
+import { AccessAuthGuard } from 'src/core/guards/access.guard';
+import { AuthGuard } from 'src/core/guards/auth.guard';
 
 @ApiTags('User')
+@ApiBearerAuth('token')
 @Controller('user')
+//@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -51,7 +53,6 @@ export class UsersController {
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    type: UserSchema,
   })
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -62,16 +63,15 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user by id' })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: UserSchema,
+    type: UpdateStatusDto,
   })
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  @UseInterceptors(new TransformInterceptor())
   public async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body(new ValidationPipe()) userDto: UpdatePasswordDto
+    @Body() { status }: UpdateStatusDto
   ) {
-    return await this.userService.update(id, userDto);
+    return await this.userService.update(id, status);
   }
 
   @ApiOperation({ summary: 'Delete user by id' })

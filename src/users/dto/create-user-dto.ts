@@ -18,4 +18,10 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'The user password cannot be empty' })
   @IsString({ message: 'The user password must be a string' })
   password: string;
+
+  createdAt?: string;
+
+  updatedAt?: string;
+
+  status?: string;
 }

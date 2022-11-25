@@ -1,6 +1,8 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { Public } from 'src/core/decorators/public.decorator';
+import { UserSchema } from 'src/schemes/user.scheme';
 import { CreateUserDto } from 'src/users/dto/create-user-dto';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin-dto';
@@ -15,10 +17,10 @@ export class AuthController {
   @ApiOperation({ summary: 'Create token' })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: SignInDto,
+    type: UserSchema,
   })
   @Post('signin')
-  public signin(@Body() user: CreateUserDto): Promise<Token> {
+  public signin(@Body() user: SignInDto): Promise<Token> {
     return this.authService.login(user);
   }
 
@@ -26,7 +28,6 @@ export class AuthController {
   @ApiOperation({ summary: 'Sign up to create' })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    type: CreateUserDto,
   })
   @Post('signup')
   public signup(@Body() user: CreateUserDto): Promise<Token> {

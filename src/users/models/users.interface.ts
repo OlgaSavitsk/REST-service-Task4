@@ -5,6 +5,7 @@ export class User {
   password?: string;
   createdAt?: string;
   updatedAt?: string;
+  status?: string;
 }
 
 export interface UserResponse {
@@ -13,4 +14,5 @@ export interface UserResponse {
   name: string;
   createdAt?: string;
   updatedAt?: string;
+  status?: string;
 }

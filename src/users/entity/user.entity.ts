@@ -24,8 +24,11 @@ export class UserEntity {
   @Column()
   updatedAt?: string;
 
+  @Column()
+  status?: string;
+
   toResponse() {
-    const { id, name, login, createdAt, updatedAt } = this;
-    return { id, name, login, createdAt, updatedAt };
+    const { id, name, login, createdAt, updatedAt, status } = this;
+    return { id, name, login, createdAt, updatedAt, status };
   }
 }
