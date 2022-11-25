@@ -18,13 +18,12 @@ import { UpdateStatusDto } from './dto/update-user-dto';
 import { UserResponse } from './models/users.interface';
 import { UsersService } from './users.service';
 import { UserSchema } from 'src/schemes/user.scheme';
-import { AccessAuthGuard } from 'src/core/guards/access.guard';
 import { AuthGuard } from 'src/core/guards/auth.guard';
 
 @ApiTags('User')
 @ApiBearerAuth('token')
 @Controller('user')
-//@UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
