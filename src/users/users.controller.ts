@@ -11,19 +11,18 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user-dto';
 import { UpdateStatusDto } from './dto/update-user-dto';
 import { UserResponse } from './models/users.interface';
 import { UsersService } from './users.service';
 import { UserSchema } from 'src/schemes/user.scheme';
-import { AuthGuard } from 'src/core/guards/auth.guard';
+import { JwtAuthGuards } from 'src/core/guards/auth.guard';
 
+@UseGuards(JwtAuthGuards)
 @ApiTags('User')
-@ApiBearerAuth('token')
 @Controller('user')
-@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
