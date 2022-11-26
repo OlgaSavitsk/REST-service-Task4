@@ -40,26 +40,28 @@ export class AuthService {
       updatedAt: date,
       status: IsBlockedStatus.ACTIVE_STATUS,
     });
+    await this.checkUser(newUser.login);
     const token = await this.getToken(newUser.id, newUser.login);
     return token;
   }
 
   async login({ login, password }: SignInDto): Promise<Token> {
-    const user = await this.userRepository.findOne({ where: { login: login } });
-    await this.checkUser(user);
+    const user = await this.checkUser(login);
     await this.checkPassword(password, user.password);
     await this.userService.createUser({ ...user, updatedAt: String(new Date().getTime()) });
     const token = await this.getToken(user.id, user.login);
     return token;
   }
 
-  async checkUser(user: UserEntity) {
+  async checkUser(login: string) {
+    const user = await this.userRepository.findOne({ where: { login: login } });
     if (!user) {
       throw new ForbiddenException(ExceptionsMessage.NOT_FOUND_USER);
     }
     if (user.status === IsBlockedStatus.BLOCKED_STATUS) {
       throw new ForbiddenException(ExceptionsMessage.STATUS_BLOCKED);
     }
+    return user;
   }
 
   async checkPassword(password: SignInDto['password'], existsPassword: string) {
