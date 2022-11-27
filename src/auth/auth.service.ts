@@ -32,7 +32,6 @@ export class AuthService {
 
   async register(userDto: CreateUserDto): Promise<Token> {
     this.checkUserInBd(userDto.login);
-    await this.checkUser(userDto.login);
     const date = String(new Date().getTime());
     const passwordHash = await this.hashData(userDto.password);
     const newUser = await this.userService.createUser({
@@ -42,6 +41,7 @@ export class AuthService {
       updatedAt: date,
       status: IsBlockedStatus.ACTIVE_STATUS,
     });
+    await this.checkUser(newUser.login);
     const token = await this.getToken(newUser.id, newUser.login);
     return token;
   }
