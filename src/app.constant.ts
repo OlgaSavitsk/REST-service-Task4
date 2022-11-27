@@ -3,6 +3,7 @@ export const enum ExceptionsMessage {
   STATUS_BLOCKED = 'Your account has been locked',
   FORBIDDEN = 'Forbidden',
   BAD_REQUEST = 'Bad request',
+  ALREADY_EXISTS = 'user exists',
 }
 
 export enum IsBlockedStatus {

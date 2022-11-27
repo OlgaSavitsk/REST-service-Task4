@@ -46,6 +46,7 @@ export class AuthService {
   }
 
   async login({ login, password }: SignInDto): Promise<Token> {
+    this.checkUserInBd(login);
     const user = await this.checkUser(login);
     await this.checkPassword(password, user.password);
     await this.userService.createUser({ ...user, updatedAt: String(new Date().getTime()) });
@@ -62,6 +63,11 @@ export class AuthService {
       throw new ForbiddenException(ExceptionsMessage.STATUS_BLOCKED);
     }
     return user;
+  }
+
+  async checkUserInBd(login) {
+    const user = await this.userRepository.findOne({ where: { login: login } });
+    if (user) throw new ForbiddenException(ExceptionsMessage.ALREADY_EXISTS);
   }
 
   async checkPassword(password: SignInDto['password'], existsPassword: string) {
