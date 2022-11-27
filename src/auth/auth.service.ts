@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async register(userDto: CreateUserDto): Promise<Token> {
-    this.checkUserInBd(userDto.login);
+    await this.checkUserInBd(userDto.login);
     const date = String(new Date().getTime());
     const passwordHash = await this.hashData(userDto.password);
     const newUser = await this.userService.createUser({
@@ -65,7 +65,7 @@ export class AuthService {
     return user;
   }
 
-  async checkUserInBd(login) {
+  async checkUserInBd(login: string) {
     const user = await this.userRepository.findOne({ where: { login: login } });
     if (user) throw new ForbiddenException(ExceptionsMessage.ALREADY_EXISTS);
   }
